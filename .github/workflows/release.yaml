@@ -13,11 +13,11 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      - run: mkdir -p build && cd build
-      - run: cmake .. -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON
-      - run: cmake --build .
-      - run: ctest --output-on-failure
-      - run: cmake --build . --target package
+      - run: mkdir -p build
+      - run: cmake -B build -S . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON
+      - run: cmake --build build
+      - run: ctest --test-dir build --output-on-failure
+      - run: cmake --build build --target package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
