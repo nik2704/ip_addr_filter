@@ -1,31 +1,27 @@
-#define BOOST_TEST_MODULE TestMultisetSorting
+#define BOOST_TEST_MODULE TestIPAddressListSorting
 #include <boost/test/unit_test.hpp>
 #include <set>
 #include "../IPaddress.h"
 
-BOOST_AUTO_TEST_SUITE(TestMultisetSorting)
+BOOST_AUTO_TEST_SUITE(TestIPAddressListSorting)
 
 BOOST_AUTO_TEST_CASE(TestReverseSorting) {
-    using IP = ip_filter::IPAddress;
-    using IP_Reverse = ip_filter::ReverseIPCompare;
+    using IPAddressList = ip_filter::IPAddressList;
 
-    std::multiset<IP, IP_Reverse> ip_addresses;
-    ip_addresses.insert(IP("192.168.0.1"));
-    ip_addresses.insert(IP("10.0.0.1"));
-    ip_addresses.insert(IP("172.16.0.1"));
+    IPAddressList ip_list;
+    ip_list.add_ip_address("192.168.0.1");
+    ip_list.add_ip_address("10.0.0.1");
+    ip_list.add_ip_address("172.16.0.1");
 
-    auto it = ip_addresses.begin();
+    auto it = ip_list.get_ip_addresses().begin();
 
-    // Проверка первого IP
     std::array<int, 4> expected_octets_1{{192, 168, 0, 1}};
     BOOST_CHECK(it->get_octets() == expected_octets_1);
 
-    // Проверка второго IP
     ++it;
     std::array<int, 4> expected_octets_2{{172, 16, 0, 1}};
     BOOST_CHECK(it->get_octets() == expected_octets_2);
 
-    // Проверка третьего IP
     ++it;
     std::array<int, 4> expected_octets_3{{10, 0, 0, 1}};
     BOOST_CHECK(it->get_octets() == expected_octets_3);

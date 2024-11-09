@@ -30,13 +30,14 @@ if(WITH_BOOST_TEST)
     # Добавляем исполняемый файл для тестов
     add_executable(test_utils tests/test_utils.cpp)
     add_executable(test_ip_address tests/test_ip_address.cpp)
-    add_executable(test_multiset tests/test_multiset.cpp)
+    add_executable(test_list tests/test_list.cpp)
+    add_executable(test_ip_filter tests/test_ip_filter.cpp)
 
     # Линкуем Boost с исполняемым файлом
     target_link_libraries(test_utils Boost::unit_test_framework)
-    # target_link_libraries(test_ip_address Boost::unit_test_framework)
     target_link_libraries(test_ip_address PRIVATE Boost::unit_test_framework ip_address)
-    target_link_libraries(test_multiset PRIVATE Boost::unit_test_framework ip_address)
+    target_link_libraries(test_list PRIVATE Boost::unit_test_framework ip_address)
+    target_link_libraries(test_ip_filter PRIVATE Boost::unit_test_framework ip_address)
 
     # Устанавливаем параметры компилятора
     set_target_properties(test_utils PROPERTIES
@@ -49,23 +50,28 @@ if(WITH_BOOST_TEST)
         CXX_STANDARD_REQUIRED ON
     )
 
-    set_target_properties(test_multiset PROPERTIES
+    set_target_properties(test_list PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
+    )
+
+    set_target_properties(test_ip_filter PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )
 
     target_include_directories(test_utils PRIVATE ${Boost_INCLUDE_DIRS})
     target_include_directories(test_ip_address PRIVATE ${Boost_INCLUDE_DIRS})
-    target_include_directories(test_multiset PRIVATE ${Boost_INCLUDE_DIRS})
+    target_include_directories(test_list PRIVATE ${Boost_INCLUDE_DIRS})
+    target_include_directories(test_ip_filter PRIVATE ${Boost_INCLUDE_DIRS})
 
     # Регистрация теста в CTest
     enable_testing()
-    add_test(NAME test_utils COMMAND test_utils)  # Добавляем тест
-    add_test(NAME test_ip_address COMMAND test_ip_address)  # Добавляем тест
-    add_test(NAME test_multiset COMMAND test_multiset)  # Добавляем тест
+    add_test(NAME test_utils COMMAND test_utils)
+    add_test(NAME test_ip_address COMMAND test_ip_address)
+    add_test(NAME test_list COMMAND test_list)
+    add_test(NAME test_ip_filter COMMAND test_list)
 endif()
-
-
 
 if (MSVC)
     target_compile_options(ip_address_flt PRIVATE
@@ -81,7 +87,10 @@ if (MSVC)
         target_compile_options(test_ip_address PRIVATE
             /W4
         )
-        target_compile_options(test_multiset PRIVATE
+        target_compile_options(test_list PRIVATE
+            /W4
+        )
+        target_compile_options(test_ip_filter PRIVATE
             /W4
         )
     endif()
@@ -99,7 +108,10 @@ else ()
         target_compile_options(test_ip_address PRIVATE
             -Wall -Wextra -pedantic -Werror
         )
-        target_compile_options(test_multiset PRIVATE
+        target_compile_options(test_list PRIVATE
+            -Wall -Wextra -pedantic -Werror
+        )
+        target_compile_options(test_ip_filter PRIVATE
             -Wall -Wextra -pedantic -Werror
         )
     
