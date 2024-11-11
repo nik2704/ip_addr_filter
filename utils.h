@@ -25,6 +25,7 @@ inline std::optional<std::string> extract_ip(const std::string& input) {
         for (int i = 0; i < 4; ++i) {
             std::getline(ss, octet, '.');
             int octet_value = std::stoi(octet);
+            
             if (octet_value < 0 || octet_value > 255) {
                 return std::nullopt;
             }

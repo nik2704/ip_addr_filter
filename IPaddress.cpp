@@ -66,10 +66,14 @@ bool IPAddressList::add_ip_address(const std::string& ip_address) {
     auto ipextracted = extract_ip(ip_address);
 
     if (ipextracted.has_value()) {
-        IPAddress addr(ipextracted .value());
-        ip_addresses_.insert(addr);
+        try {
+            IPAddress addr(ipextracted .value());
+            ip_addresses_.insert(addr);
 
-        return true;
+            return true;
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
     }
 
     return false;
